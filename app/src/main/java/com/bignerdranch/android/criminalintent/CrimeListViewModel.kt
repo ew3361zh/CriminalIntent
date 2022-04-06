@@ -18,4 +18,10 @@ class CrimeListViewModel : ViewModel() {
     private val crimeRepository = CrimeRepository.get()
     val crimeListLiveData = crimeRepository.getCrimes()
 
+    // to respond to user pressing New Crime action in CrimeFragment, adding function here so that
+    // CrimeListFragment can add a new crime to the db
+    fun addCrime(crime: Crime) {
+        crimeRepository.addCrime(crime)
+    }
+
 }

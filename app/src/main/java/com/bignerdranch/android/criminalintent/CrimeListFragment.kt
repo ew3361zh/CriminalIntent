@@ -3,9 +3,7 @@ package com.bignerdranch.android.criminalintent
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -39,6 +37,12 @@ class CrimeListFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callbacks = context as Callbacks?
+    }
+
+    // defines CrimeLIstFragment.OnCreate Bundle and lets Fragment Manager know CrimeListFragment needs to receive menu callbacks
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     // allows CrimeListFragment to use the fragment_crime_list layout view and find the RecylcerView in the layout file
@@ -78,6 +82,26 @@ class CrimeListFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         callbacks = null // set to null because after you can't access activity or count on it continuing to exist
+    }
+
+    // when called, this passes menu resource to populate menu instance with items defined in the file
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_crime_list, menu)
+    }
+
+    // responss to menuitem selection by creating a new crime
+    // returns a boolean value to indicate no further processing needed, else it returns false
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.new_crime -> {
+                val crime = Crime()
+                crimeListViewModel.addCrime(crime)
+                callbacks?.onCrimeSelected(crime.id)
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
     // connect adapter to recycler view
