@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.bignerdranch.android.criminalintent.database.CrimeDatabase
 import com.bignerdranch.android.criminalintent.database.migration_1_2
+import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -24,6 +25,7 @@ class CrimeRepository private constructor(context: Context) { // singleton
     // newsinglethreadexecutor returns executor instance that points to a new thread so any work
     // done by executor is off the main thread and doesn't disrupt UI
     private val executor = Executors.newSingleThreadExecutor()
+    private val filesDir = context.applicationContext.filesDir
 
     fun getCrimes(): LiveData<List<Crime>> = crimeDao.getCrimes()
     fun getCrime(id: UUID): LiveData<Crime?> = crimeDao.getCrime(id)
@@ -39,6 +41,9 @@ class CrimeRepository private constructor(context: Context) { // singleton
             crimeDao.addCrime(crime)
         }
     }
+
+    // does not create files on filesystem, only returns File objects that point to right locations
+    fun getPhotoFile(crime: Crime): File = File(filesDir, crime.photoFileName)
 
     companion object {
         private var INSTANCE: CrimeRepository? = null
