@@ -89,7 +89,7 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
                 this.crime = crime
                 photoFile = crimeDetailViewModel.getPhotoFile(crime)
                 // uri points to where to save photo file, this function translates local file path into uri camera app can see
-                photoUri = FileProvider.getUriForFile(requireActivity(), "com.bignerdranch.android.criminalintent", photoFile)
+                photoUri = FileProvider.getUriForFile(requireActivity(), "com.bignerdranch.android.criminalintent.fileprovider", photoFile)
                 updateUI()
             }
         }
